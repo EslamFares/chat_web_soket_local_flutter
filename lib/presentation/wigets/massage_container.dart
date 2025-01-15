@@ -19,14 +19,12 @@ class MassageContainer extends StatelessWidget {
           margin: const EdgeInsets.all(10),
           padding: const EdgeInsets.all(20.0),
           decoration: BoxDecoration(
-              color: MsgTypesEnumParsing.fromString(msgModel.type).isReviver
-                  ? Colors.green
-                  : Colors.red,
-              borderRadius: BorderRadius.circular(20)),
+              color: msgColor(), borderRadius: BorderRadius.circular(20)),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("${msgModel.sender}:"),
+              Text(
+                  "${msgModel.sender}:${(msgModel.sender.trim() == msgModel.usename.trim() && msgModel.sender != "Server") ? "(you)" : ''}"),
               Text(msgModel.msg),
               Align(
                   alignment:
@@ -44,5 +42,16 @@ class MassageContainer extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  Color msgColor() {
+    if (MsgTypesEnumParsing.fromString(msgModel.type).isReviver) {
+      if (msgModel.sender.trim() == msgModel.usename.trim()) {
+        return Colors.teal;
+      } else {
+        return Colors.blue.withOpacity(.8);
+      }
+    }
+    return Colors.grey;
   }
 }

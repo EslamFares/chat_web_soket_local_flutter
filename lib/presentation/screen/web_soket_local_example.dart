@@ -11,7 +11,9 @@ class WebSocketDemo extends StatefulWidget {
 }
 
 class WebSocketDemoState extends State<WebSocketDemo> {
-  final _channel = WebSocketChannel.connect(Uri.parse('ws://localhost:8080'));
+  String androidLink = "ws://192.168.2.1:8080";
+  String iosLink = "ws://localhost:8080";
+  final _channel = WebSocketChannel.connect(Uri.parse("ws://192.168.2.1:8080"));
   final TextEditingController _controller = TextEditingController();
   final List<MsgModel> _messages = [];
   final ScrollController _scrollController = ScrollController();
@@ -21,6 +23,7 @@ class WebSocketDemoState extends State<WebSocketDemo> {
     super.initState();
     // Listen for incoming messages from the server
     _channel.stream.listen((message) {
+      debugPrint('message: $message');
       setState(() {
         _messages.add(MsgModel.fromJson(message));
       });

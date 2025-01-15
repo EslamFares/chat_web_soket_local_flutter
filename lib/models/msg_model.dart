@@ -7,12 +7,14 @@ class MsgModel {
   final String time;
   final String date;
   final String sender;
+  final String usename;
   MsgModel({
     required this.type,
     required this.msg,
     required this.time,
     required this.date,
     required this.sender,
+    required this.usename,
   });
 
   MsgModel copyWith({
@@ -21,6 +23,7 @@ class MsgModel {
     String? time,
     String? date,
     String? sender,
+    String? usename,
   }) {
     return MsgModel(
       type: type ?? this.type,
@@ -28,16 +31,18 @@ class MsgModel {
       time: time ?? this.time,
       date: date ?? this.date,
       sender: sender ?? this.sender,
+      usename: usename ?? this.usename,
     );
   }
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'type': type,
-      'message': msg,
+      'msg': msg,
       'time': time,
       'date': date,
       'sender': sender,
+      'usename': usename,
     };
   }
 
@@ -48,6 +53,7 @@ class MsgModel {
       time: map['time'] ?? "",
       date: map['date'] ?? "",
       sender: map['sender'] ?? "",
+      usename: map['usename'] ?? "",
     );
   }
 
@@ -58,7 +64,7 @@ class MsgModel {
 
   @override
   String toString() {
-    return 'MsgModel(type: $type, message: $msg, time: $time, date: $date, sender: $sender)';
+    return 'MsgModel(type: $type, msg: $msg, time: $time, date: $date, sender: $sender, usename: $usename)';
   }
 
   @override
@@ -69,7 +75,8 @@ class MsgModel {
         other.msg == msg &&
         other.time == time &&
         other.date == date &&
-        other.sender == sender;
+        other.sender == sender &&
+        other.usename == usename;
   }
 
   @override
@@ -78,6 +85,7 @@ class MsgModel {
         msg.hashCode ^
         time.hashCode ^
         date.hashCode ^
-        sender.hashCode;
+        sender.hashCode ^
+        usename.hashCode;
   }
 }
