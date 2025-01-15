@@ -1,4 +1,4 @@
-# Chat_web_socket_local_app
+# Chat web_socket local flutter app and connect with node js 
 
 # images from app
 <p float="left">
@@ -8,4 +8,4 @@
 
 ## Getting Started
 use nod js create soket local and connect with flutter chat 
-link ==> https://github.com/EslamFares/web_soket_local_nodejs
+link nodejs repo ==> https://github.com/EslamFares/web_soket_local_nodejs
