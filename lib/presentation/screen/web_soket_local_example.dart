@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:try_web_socket_local/models/msg_model.dart';
+import 'package:try_web_socket_local/presentation/wigets/massage_container.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 class WebSocketDemo extends StatefulWidget {
@@ -11,7 +13,7 @@ class WebSocketDemo extends StatefulWidget {
 class WebSocketDemoState extends State<WebSocketDemo> {
   final _channel = WebSocketChannel.connect(Uri.parse('ws://localhost:8080'));
   final TextEditingController _controller = TextEditingController();
-  final List<String> _messages = [];
+  final List<MsgModel> _messages = [];
   final ScrollController _scrollController = ScrollController();
 
   @override
@@ -20,7 +22,7 @@ class WebSocketDemoState extends State<WebSocketDemo> {
     // Listen for incoming messages from the server
     _channel.stream.listen((message) {
       setState(() {
-        _messages.add(message);
+        _messages.add(MsgModel.fromJson(message));
       });
       // Scroll to the bottom after adding a new message
       _scrollToBottom();
@@ -28,8 +30,8 @@ class WebSocketDemoState extends State<WebSocketDemo> {
   }
 
   void _sendMessage() {
-    if (_controller.text.isNotEmpty) {
-      _channel.sink.add(_controller.text);
+    if (_controller.text.isNotEmpty && _controller.text.trim() != '') {
+      _channel.sink.add(_controller.text.trim());
       _controller.clear();
     }
   }
@@ -38,7 +40,7 @@ class WebSocketDemoState extends State<WebSocketDemo> {
     // Scroll to the bottom of the ListView
     _scrollController.animateTo(
       _scrollController.position.maxScrollExtent +
-          (_messages.length > 5 ? 90 : 0), //70 for textfield height
+          (_messages.length > 5 ? 120 : 0), //120 for textfield height
       duration: const Duration(milliseconds: 250),
       curve: Curves.easeOut,
     );
@@ -62,7 +64,7 @@ class WebSocketDemoState extends State<WebSocketDemo> {
               controller: _scrollController,
               itemCount: _messages.length,
               itemBuilder: (context, index) =>
-                  MassageContainer(messages: _messages[index]),
+                  MassageContainer(msgModel: _messages[index]),
             ),
           ),
           Padding(
@@ -70,10 +72,14 @@ class WebSocketDemoState extends State<WebSocketDemo> {
             child: Row(
               children: [
                 Expanded(
-                  child: TextField(
+                  child: TextFormField(
+                    maxLines: 2,
                     controller: _controller,
-                    decoration:
-                        const InputDecoration(labelText: 'Enter message'),
+                    decoration: const InputDecoration(
+                        labelText: 'Enter message',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                        )),
                   ),
                 ),
                 IconButton(
@@ -86,42 +92,6 @@ class WebSocketDemoState extends State<WebSocketDemo> {
           // const SizedBox(height: 20)
         ],
       ),
-    );
-  }
-}
-
-class MassageContainer extends StatelessWidget {
-  const MassageContainer({super.key, required this.messages});
-  final String messages;
-
-  @override
-  Widget build(BuildContext context) {
-    final msg = messages.split("at")[0];
-    final msgSender = msg.split(":")[0];
-    final msgConatinet = msg.split(":")[1];
-    final time = messages.split("at")[1];
-    return Column(
-      crossAxisAlignment: messages.contains("Server received:")
-          ? CrossAxisAlignment.end
-          : CrossAxisAlignment.start,
-      children: [
-        Container(
-          margin: const EdgeInsets.all(10),
-          padding: const EdgeInsets.all(20.0),
-          decoration: BoxDecoration(
-              color:
-                  msg.contains("Server received:") ? Colors.green : Colors.red,
-              borderRadius: BorderRadius.circular(20)),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text("$msgSender:"),
-              Text(msgConatinet),
-              Text(time),
-            ],
-          ),
-        ),
-      ],
     );
   }
 }

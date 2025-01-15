@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:try_web_socket_local/web_soket_local_example.dart';
+import 'package:try_web_socket_local/presentation/screen/web_soket_local_example.dart';
 
 void main() {
   runApp(const MyApp());
